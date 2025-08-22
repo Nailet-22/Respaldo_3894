@@ -7,10 +7,13 @@
 ],
 "ASSOCIATED":
 [
-"ZR_DT_INCT_NC"
+"ZC_DT_INCT_H_NC",
+"ZDD_INCT_H_NC"
 ],
 "BASE":
-[],
+[
+"ZR_DT_INCT_NC"
+],
 "ANNO_REF":
 [],
 "SCALAR_FUNCTION":

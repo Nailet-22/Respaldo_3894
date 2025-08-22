@@ -1,29 +1,62 @@
 @Metadata.layer: #CORE
-@UI.headerInfo.title.type: #STANDARD
-@UI.headerInfo.title.value: 'IncUUID'
-@UI.headerInfo.description.type: #STANDARD
-@UI.headerInfo.description.value: 'IncUUID'
+@UI: { headerInfo: { typeName:       'Incident',
+                     typeNamePlural: 'Incidents',
+                     title:          { type: #STANDARD,
+                                       label: 'Incidents',
+                                       value: 'IncidentID' } },
+             presentationVariant: [{ sortOrder: [{ by: 'IncidentID',
+                                          direction: #ASC }],
+                              visualizations: [{ type: #AS_LINEITEM }] }] }
 annotate view ZC_DT_INCT_NC with
 {
   @EndUserText.label: 'IncUUID'
-  @UI.facet: [ {
-    label: 'General Information', 
-    id: 'GeneralInfo', 
-    purpose: #STANDARD, 
-    position: 10 , 
-    type: #IDENTIFICATION_REFERENCE
-  } ]
-  @UI.identification: [ {
-    position: 10 , 
-    label: 'IncUUID'
-  } ]
-  @UI.lineItem: [ {
-    position: 10 , 
-    label: 'IncUUID'
-  } ]
-  @UI.selectionField: [ {
-    position: 10 
-  } ]
+//  @UI.facet: [ {
+//    label: 'General Information', 
+//    id: 'GeneralInfo', 
+//    purpose: #STANDARD, 
+//    position: 10 , 
+//    type: #IDENTIFICATION_REFERENCE
+//  } ]
+//  @UI.identification: [ {
+//    position: 10 , 
+//    label: 'IncUUID'
+//  } ]
+//  @UI.lineItem: [ {
+//    position: 10 , 
+//    label: 'IncUUID'
+//  } ]
+//  @UI.selectionField: [ {
+//    position: 10 
+//  } ]
+ 
+ 
+   @UI.facet: [{ id:            'Incident',
+                purpose:       #STANDARD,
+                type:          #IDENTIFICATION_REFERENCE,
+                label:         'Incident',
+                position:      10 },
+              { id:            'History',
+                purpose:       #STANDARD,
+                type:          #LINEITEM_REFERENCE,
+                label:         'History',
+                position:      20,
+                targetElement: '_History'}]
+  @UI.hidden: true
+  @UI: {lineItem: [{ position: 10,
+               importance: #HIGH,
+               label: 'IncUUID'},
+               { type: #FOR_ACTION,
+                 dataAction: 'changeStatus',
+                 label: 'Change Status',
+                 position: 10 }],
+  identification: [{ position: 10,
+                     label: 'IncUUID' },
+               { type: #FOR_ACTION,
+                 dataAction: 'changeStatus',
+                 label: 'Change Status',
+                 position: 10 } ],
+  selectionField: [{ position: 10 }]}
+  
   IncUUID;
   
   @UI.identification: [ {
@@ -170,5 +203,5 @@ annotate view ZC_DT_INCT_NC with
   @UI.selectionField: [ {
     position: 140 
   } ]
-  _BaseEntity;
+  _baseentity;
 }

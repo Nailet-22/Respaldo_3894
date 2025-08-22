@@ -1,30 +1,30 @@
 managed implementation in class ZBP_R_DT_INCT_NC unique;
 strict ( 2 );
 with draft;
-extensible;
 define behavior for ZR_DT_INCT_NC alias Incident
-persistent table ZDT_INCT_NC
-extensible
-draft table ZDT_D_INCT_NC
+persistent table zdt_inct_nc
+draft table zdt_d_inct_nc
 etag master LocalLastChangedAt
 lock master total etag LastChangedAt
-authorization master( global )
+authorization master ( global, instance )
 {
-  field ( readonly )
-   IncUUID,
-   LocalCreatedBy,
-   LocalCreatedAt,
-   LocalLastChangedBy,
-   LocalLastChangedAt,
-   LastChangedAt;
-
-  field ( numbering : managed )
-   IncUUID;
-
 
   create;
   update;
   delete;
+
+  association _History { create ( features : instance ); with draft; }
+
+  field ( readonly )
+  IncUUID,
+  LocalCreatedBy,
+  LocalCreatedAt,
+  LocalLastChangedBy,
+  LocalLastChangedAt,
+  LastChangedAt;
+
+  field ( numbering : managed )
+  IncUUID;
 
   draft action Activate optimized;
   draft action Discard;
@@ -32,21 +32,63 @@ authorization master( global )
   draft action Resume;
   draft determine action Prepare;
 
-  mapping for ZDT_INCT_NC corresponding extensible
-  {
-    IncUUID = inc_uuid;
-    IncidentID = incident_id;
-    Title = title;
-    Description = description;
-    Status = status;
-    Priority = priority;
-    CreationDate = creation_date;
-    ChangedDate = changed_date;
-    LocalCreatedBy = local_created_by;
-    LocalCreatedAt = local_created_at;
-    LocalLastChangedBy = local_last_changed_by;
-    LocalLastChangedAt = local_last_changed_at;
-    LastChangedAt = last_changed_at;
-  }
+  mapping for zdt_inct_nc
+    {
+      IncUUID            = inc_uuid;
+      IncidentID         = incident_id;
+      Title              = title;
+      Description        = description;
+      Status             = status;
+      Priority           = priority;
+      CreationDate       = creation_date;
+      ChangedDate        = changed_date;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
 
+}
+
+
+define behavior for zdd_inct_h_nc alias History
+implementation in class zbp_dd_inct_h_nc unique
+persistent table zdt_inct_h_nc
+draft table zdt_d_inct_h_nc
+lock dependent by _Incident
+authorization dependent by _Incident
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+
+  association _Incident { with draft; }
+
+  field ( numbering : managed )
+  HisUUID;
+
+  field ( readonly )
+  HisUUID,
+  IncUUID,
+  LocalCreatedBy,
+  LocalCreatedAt,
+  LocalLastChangedBy,
+  LocalLastChangedAt,
+  LastChangedAt;
+
+  mapping for zdt_inct_h_nc
+    {
+      HisUUID            = his_uuid;
+      IncUUID            = inc_uuid;
+      HisID              = his_id;
+      PreviousStatus     = previous_status;
+      NewStatus          = new_status;
+      Text               = text;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
 }

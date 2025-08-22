@@ -6,6 +6,8 @@
     name: 'ZC_DT_INCT_NC'
   }
 }
-define service ZUI_DT_INCT_NC_O4 provider contracts odata_v4_ui {
-  expose ZC_DT_INCT_NC as Incident;
+define service ZUI_DT_INCT_NC_O4
+  provider contracts odata_v4_ui {
+  expose ZC_DT_INCT_NC   as Incident;
+  expose ZC_DT_INCT_H_NC as History;
 }

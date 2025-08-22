@@ -3,11 +3,11 @@
 {
 "FROM":
 [
-"ZDT_INCT_NC"
+"ZDT_INCT_H_NC"
 ],
 "ASSOCIATED":
 [
-"ZDD_INCT_H_NC"
+"ZR_DT_INCT_NC"
 ],
 "BASE":
 [],
