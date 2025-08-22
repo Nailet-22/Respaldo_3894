@@ -1,0 +1,11 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "SAP Object Node Type ZDTINCT_NC",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "name": "ZDTINCT_NC",
+  "sapObjectType": "ZDTINCT_NC",
+  "rootNode": true
+}

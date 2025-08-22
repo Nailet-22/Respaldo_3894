@@ -1,0 +1,6 @@
+@EndUserText.label: 'ZC_DT_INCT_NC'
+@MappingRole: true
+define role ZC_DT_INCT_NC {
+  grant select on ZC_DT_INCT_NC
+  where INHERITING CONDITIONS FROM ENTITY ZR_DT_INCT_NC REPLACING { ROOT WITH _BaseEntity };
+}

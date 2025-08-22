@@ -1,0 +1,52 @@
+managed implementation in class ZBP_R_DT_INCT_NC unique;
+strict ( 2 );
+with draft;
+extensible;
+define behavior for ZR_DT_INCT_NC alias Incident
+persistent table ZDT_INCT_NC
+extensible
+draft table ZDT_D_INCT_NC
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master( global )
+{
+  field ( readonly )
+   IncUUID,
+   LocalCreatedBy,
+   LocalCreatedAt,
+   LocalLastChangedBy,
+   LocalLastChangedAt,
+   LastChangedAt;
+
+  field ( numbering : managed )
+   IncUUID;
+
+
+  create;
+  update;
+  delete;
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  draft determine action Prepare;
+
+  mapping for ZDT_INCT_NC corresponding extensible
+  {
+    IncUUID = inc_uuid;
+    IncidentID = incident_id;
+    Title = title;
+    Description = description;
+    Status = status;
+    Priority = priority;
+    CreationDate = creation_date;
+    ChangedDate = changed_date;
+    LocalCreatedBy = local_created_by;
+    LocalCreatedAt = local_created_at;
+    LocalLastChangedBy = local_last_changed_by;
+    LocalLastChangedAt = local_last_changed_at;
+    LastChangedAt = last_changed_at;
+  }
+
+}
