@@ -15,8 +15,19 @@ authorization master ( global, instance )
 
   association _History { create ( features : instance ); with draft; }
 
+//  field ( readonly )
+//  IncUUID,
+//  LocalCreatedBy,
+//  LocalCreatedAt,
+//  LocalLastChangedBy,
+//  LocalLastChangedAt,
+//  LastChangedAt;
+
   field ( readonly )
   IncUUID,
+  IncidentID,
+  Status,
+  ChangedDate,
   LocalCreatedBy,
   LocalCreatedAt,
   LocalLastChangedBy,
@@ -25,6 +36,17 @@ authorization master ( global, instance )
 
   field ( numbering : managed )
   IncUUID;
+
+  action ( features : instance, authorization : update ) changeStatus
+    parameter zdd_change_status_param_nc result [1] $self;
+
+  side effects { action changeStatus affects $self; }
+
+    internal action setHistory;
+
+  determination setDefaultHistory on save { create; }
+
+  determination setDefaultValues on modify { create; }
 
   draft action Activate optimized;
   draft action Discard;

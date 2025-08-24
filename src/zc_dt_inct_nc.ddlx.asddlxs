@@ -92,6 +92,12 @@ annotate view ZC_DT_INCT_NC with
   } ]
   Description;
   
+   @Consumption.valueHelpDefinition: [ {
+    entity.name: 'zdd_status_vh_nc',
+    entity.element: 'StatusCode',
+    useForValidation: true
+  } ]
+  
   @UI.identification: [ {
     position: 50 
   } ]
@@ -101,7 +107,14 @@ annotate view ZC_DT_INCT_NC with
   @UI.selectionField: [ {
     position: 50 
   } ]
+  
   Status;
+  
+  @Consumption.valueHelpDefinition: [ {
+    entity.name: 'zdd_priority_vh_nc',
+    entity.element: 'PriorityCode',
+    useForValidation: true
+  } ]
   
   @UI.identification: [ {
     position: 60 
@@ -203,5 +216,6 @@ annotate view ZC_DT_INCT_NC with
   @UI.selectionField: [ {
     position: 140 
   } ]
-  _baseentity;
+   @UI.hidden: true 
+  _History;
 }
