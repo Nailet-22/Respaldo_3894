@@ -40,6 +40,7 @@ authorization master ( global, instance )
   action ( features : instance, authorization : update ) changeStatus
     parameter zdd_change_status_param_nc result [1] $self;
 
+
   side effects { action changeStatus affects $self; }
 
     internal action setHistory;

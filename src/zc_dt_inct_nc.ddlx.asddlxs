@@ -10,37 +10,17 @@
 annotate view ZC_DT_INCT_NC with
 {
   @EndUserText.label: 'IncUUID'
-//  @UI.facet: [ {
-//    label: 'General Information', 
-//    id: 'GeneralInfo', 
-//    purpose: #STANDARD, 
-//    position: 10 , 
-//    type: #IDENTIFICATION_REFERENCE
-//  } ]
-//  @UI.identification: [ {
-//    position: 10 , 
-//    label: 'IncUUID'
-//  } ]
-//  @UI.lineItem: [ {
-//    position: 10 , 
-//    label: 'IncUUID'
-//  } ]
-//  @UI.selectionField: [ {
-//    position: 10 
-//  } ]
- 
- 
-   @UI.facet: [{ id:            'Incident',
-                purpose:       #STANDARD,
-                type:          #IDENTIFICATION_REFERENCE,
-                label:         'Incident',
-                position:      10 },
-              { id:            'History',
-                purpose:       #STANDARD,
-                type:          #LINEITEM_REFERENCE,
-                label:         'History',
-                position:      20,
-                targetElement: '_History'}]
+  @UI.facet: [{ id:            'Incident',
+               purpose:       #STANDARD,
+               type:          #IDENTIFICATION_REFERENCE,
+               label:         'Incident',
+               position:      10 },
+             { id:            'History',
+               purpose:       #STANDARD,
+               type:          #LINEITEM_REFERENCE,
+               label:         'History',
+               position:      20,
+               targetElement: '_History'}]
   @UI.hidden: true
   @UI: {lineItem: [{ position: 10,
                importance: #HIGH,
@@ -56,166 +36,96 @@ annotate view ZC_DT_INCT_NC with
                  label: 'Change Status',
                  position: 10 } ],
   selectionField: [{ position: 10 }]}
-  
+
   IncUUID;
-  
-  @UI.identification: [ {
-    position: 20 
-  } ]
-  @UI.lineItem: [ {
-    position: 20 
-  } ]
-  @UI.selectionField: [ {
-    position: 20 
-  } ]
+
+  @UI: {lineItem: [{ position: 20,
+               importance: #MEDIUM }],
+  identification: [{ position: 20  } ],
+  selectionField: [{ position: 20 }]}
   IncidentID;
-  
-  @UI.identification: [ {
-    position: 30 
-  } ]
-  @UI.lineItem: [ {
-    position: 30 
-  } ]
-  @UI.selectionField: [ {
-    position: 30 
-  } ]
+
+  @UI: {lineItem: [{ position: 30,
+               importance: #LOW }],
+  identification: [{ position: 30  } ] }
   Title;
-  
-  @UI.identification: [ {
-    position: 40 
-  } ]
-  @UI.lineItem: [ {
-    position: 40 
-  } ]
-  @UI.selectionField: [ {
-    position: 40 
-  } ]
+
+  @UI: {lineItem: [{ position: 40,
+               importance: #LOW }],
+  identification: [{ position: 40  } ],
+  selectionField: [{ position: 40 }]}
   Description;
-  
-   @Consumption.valueHelpDefinition: [ {
+
+  @Consumption.valueHelpDefinition: [ {
     entity.name: 'zdd_status_vh_nc',
     entity.element: 'StatusCode',
     useForValidation: true
   } ]
-  
-  @UI.identification: [ {
-    position: 50 
-  } ]
-  @UI.lineItem: [ {
-    position: 50 
-  } ]
-  @UI.selectionField: [ {
-    position: 50 
-  } ]
-  
+  @UI: {lineItem: [{ position: 50,
+               importance: #LOW }],
+  identification: [{ position: 50  } ],
+  selectionField: [{ position: 50 }]}
+
   Status;
-  
-  @Consumption.valueHelpDefinition: [ {
+
+   @Consumption.valueHelpDefinition: [ {
     entity.name: 'zdd_priority_vh_nc',
     entity.element: 'PriorityCode',
     useForValidation: true
   } ]
-  
-  @UI.identification: [ {
-    position: 60 
-  } ]
-  @UI.lineItem: [ {
-    position: 60 
-  } ]
-  @UI.selectionField: [ {
-    position: 60 
-  } ]
+  @UI: {lineItem: [{ position: 60,
+               importance: #LOW }],
+  identification: [{ position: 60  } ],
+  selectionField: [{ position: 60 }]}
   Priority;
-  
-  @UI.identification: [ {
-    position: 70 
-  } ]
-  @UI.lineItem: [ {
-    position: 70 
-  } ]
-  @UI.selectionField: [ {
-    position: 70 
-  } ]
+
+  @UI: {lineItem: [{ position: 70,
+               importance: #LOW }],
+  identification: [{ position: 70  } ],
+  selectionField: [{ position: 70 }]}
   CreationDate;
-  
-  @UI.identification: [ {
-    position: 80 
-  } ]
-  @UI.lineItem: [ {
-    position: 80 
-  } ]
-  @UI.selectionField: [ {
-    position: 80 
-  } ]
+
+  @UI: {lineItem: [{ position: 80,
+               importance: #LOW }],
+  identification: [{ position: 80  } ],
+  selectionField: [{ position: 80 }]}
   ChangedDate;
-  
-  @UI.identification: [ {
-    position: 90 
-  } ]
-  @UI.lineItem: [ {
-    position: 90 
-  } ]
-  @UI.selectionField: [ {
-    position: 90 
-  } ]
+
+  @UI: {lineItem: [{ position: 90,
+               importance: #LOW }],
+  identification: [{ position: 90  } ],
+  selectionField: [{ position: 90 }]}
+  @UI.hidden: true
   LocalCreatedBy;
-  
-  @UI.identification: [ {
-    position: 100 
-  } ]
-  @UI.lineItem: [ {
-    position: 100 
-  } ]
-  @UI.selectionField: [ {
-    position: 100 
-  } ]
+
+  @UI: {lineItem: [{ position: 100,
+               importance: #LOW }],
+  identification: [{ position: 100  } ],
+  selectionField: [{ position: 100 }]}
+  @UI.hidden: true
   LocalCreatedAt;
-  
-  @UI.identification: [ {
-    position: 110 
-  } ]
-  @UI.lineItem: [ {
-    position: 110 
-  } ]
-  @UI.selectionField: [ {
-    position: 110 
-  } ]
+
+  @UI: {lineItem: [{ position: 110,
+               importance: #LOW }],
+  identification: [{ position: 110  } ],
+  selectionField: [{ position: 110 }]}
+  @UI.hidden: true
   LocalLastChangedBy;
-  
-  @UI.identification: [ {
-    position: 120 
-  } ]
-  @UI.lineItem: [ {
-    position: 120 
-  } ]
-  @UI.selectionField: [ {
-    position: 120 
-  } ]
+
+  @UI: {lineItem: [{ position: 120,
+               importance: #LOW }],
+  identification: [{ position: 120  } ],
+  selectionField: [{ position: 120 }]}
+  @UI.hidden: true
   LocalLastChangedAt;
-  
-  @UI.identification: [ {
-    position: 130 
-  } ]
-  @UI.lineItem: [ {
-    position: 130 
-  } ]
-  @UI.selectionField: [ {
-    position: 130 
-  } ]
+
+  @UI: {lineItem: [{ position: 130,
+               importance: #LOW }],
+  identification: [{ position: 130  } ],
+  selectionField: [{ position: 130 }]}
+  @UI.hidden: true
   LastChangedAt;
   
-  @EndUserText.label: '_BaseEntity'
-  @UI.identification: [ {
-    position: 140 , 
-    label: '_BaseEntity'
-  } ]
-  @UI.lineItem: [ {
-    position: 140 , 
-    label: '_BaseEntity'
-  } ]
-  @UI.selectionField: [ {
-    position: 140 
-  } ]
-   @UI.hidden: true 
+  @UI.hidden: true
   _History;
 }

@@ -3,12 +3,12 @@ CLASS lhc_zr_dt_inct_nc DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PUBLIC SECTION.
 
     CONSTANTS: BEGIN OF mc_status,
-                 open        TYPE zde_status2_lgl VALUE 'OP',
-                 in_progress TYPE zde_status2_lgl VALUE 'IP',
-                 pending     TYPE zde_status2_lgl VALUE 'PE',
-                 completed   TYPE zde_status2_lgl VALUE 'CO',
-                 closed      TYPE zde_status2_lgl VALUE 'CL',
-                 canceled    TYPE zde_status2_lgl VALUE 'CN',
+                 open        TYPE zde_status_nc VALUE 'OP',
+                 in_progress TYPE zde_status_nc VALUE 'IP',
+                 pending     TYPE zde_status_nc VALUE 'PE',
+                 completed   TYPE zde_status_nc VALUE 'CO',
+                 closed      TYPE zde_status_nc VALUE 'CL',
+                 canceled    TYPE zde_status_nc VALUE 'CN',
                END OF mc_status.
 
   PRIVATE SECTION.
@@ -32,8 +32,8 @@ CLASS lhc_zr_dt_inct_nc DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS setdefaultvalues FOR DETERMINE ON MODIFY
       IMPORTING keys FOR incident~setdefaultvalues.
 
-    METHODS changestatus FOR MODIFY
-      IMPORTING keys FOR ACTION incident~changestatus.
+    METHODS changeStatus FOR MODIFY
+      IMPORTING keys FOR ACTION incident~ChangeStatus RESULT result.
 
     METHODS get_history_index EXPORTING ev_incuuid      TYPE sysuuid_x16
                               RETURNING VALUE(rv_index) TYPE zde_his_id_nc.
@@ -46,6 +46,7 @@ CLASS lhc_zr_dt_inct_nc IMPLEMENTATION.
   METHOD get_instance_features.
 
     DATA lv_history_index TYPE zde_his_id_nc.
+
     READ ENTITIES OF zr_dt_inct_nc IN LOCAL MODE
        ENTITY Incident
          FIELDS ( Status )
@@ -54,6 +55,7 @@ CLASS lhc_zr_dt_inct_nc IMPLEMENTATION.
        FAILED failed.
 
     DATA(lv_create_action) = lines( incidents ).
+
     IF lv_create_action EQ 1.
       lv_history_index = get_history_index( IMPORTING ev_incuuid = incidents[ 1 ]-IncUUID ).
     ELSE.
@@ -133,16 +135,16 @@ CLASS lhc_zr_dt_inct_nc IMPLEMENTATION.
 
     FREE incidents. " Free entries in incidents
 
-     MODIFY ENTITIES OF zr_dt_inct_nc IN LOCAL MODE
-     ENTITY Incident
-     CREATE BY \_History FIELDS ( HisUUID
-                                  IncUUID
-                                  HisID
-                                  PreviousStatus
-                                  NewStatus
-                                  Text )
-        AUTO FILL CID
-        WITH lt_association_entity.
+    MODIFY ENTITIES OF zr_dt_inct_nc IN LOCAL MODE
+    ENTITY Incident
+    CREATE BY \_History FIELDS ( HisUUID
+                                 IncUUID
+                                 HisID
+                                 PreviousStatus
+                                 NewStatus
+                                 Text )
+       AUTO FILL CID
+       WITH lt_association_entity.
 
   ENDMETHOD.
 
@@ -151,7 +153,7 @@ CLASS lhc_zr_dt_inct_nc IMPLEMENTATION.
 
     SELECT FROM zdt_inct_h_nc
       FIELDS MAX( his_id ) AS max_his_id
-      WHERE "inc_uuid EQ @ev_incuuid AND
+      WHERE inc_uuid EQ @ev_incuuid AND
             his_uuid IS NOT NULL
       INTO @rv_index.
 
@@ -171,9 +173,9 @@ CLASS lhc_zr_dt_inct_nc IMPLEMENTATION.
 
 
     SELECT FROM zdt_inct_nc
-  FIELDS MAX( incident_id ) AS max_inct_id
-  WHERE incident_id IS NOT NULL
-  INTO @DATA(lv_max_inct_id).
+    FIELDS MAX( incident_id ) AS max_inct_id
+    WHERE incident_id IS NOT NULL
+    INTO @DATA(lv_max_inct_id).
 
     IF lv_max_inct_id IS INITIAL.
       lv_max_inct_id = 1.
@@ -198,13 +200,13 @@ CLASS lhc_zr_dt_inct_nc IMPLEMENTATION.
 
     DATA: lt_updated_root_entity TYPE TABLE FOR UPDATE zr_dt_inct_nc,
           lt_association_entity  TYPE TABLE FOR CREATE zr_dt_inct_nc\_History,
-          lv_status              TYPE zde_status2_lgl,
-          lv_text                TYPE zde_text_lgl,
+          lv_status              TYPE zde_status_nc,
+          lv_text                TYPE zde_text_nc,
           lv_exception           TYPE string,
           lv_error               TYPE c,
-          ls_incident_history    TYPE zdt_inct_h_lgl,
-          lv_max_his_id          TYPE zde_his_id_lgl,
-          lv_wrong_status        TYPE zde_status2_lgl.
+          ls_incident_history    TYPE zdt_inct_h_nc,
+          lv_max_his_id          TYPE zde_his_id_nc,
+          lv_wrong_status        TYPE zde_status_nc.
 
     READ ENTITIES OF zr_dt_inct_nc IN LOCAL MODE
          ENTITY Incident
@@ -215,7 +217,7 @@ CLASS lhc_zr_dt_inct_nc IMPLEMENTATION.
 ** Get parameters
     LOOP AT incidents ASSIGNING FIELD-SYMBOL(<incident>).
 ** Get Status
-*      lv_status = keys[ KEY id %tky = <incident>-%tky ]-%param-status.
+      lv_status = keys[ KEY id %tky = <incident>-%tky ]-%param-status.
 
 **  It is not possible to change the pending (PE) to Completed (CO) or Closed (CL) status
       IF <incident>-Status EQ mc_status-pending AND lv_status EQ mc_status-closed OR
@@ -225,13 +227,13 @@ CLASS lhc_zr_dt_inct_nc IMPLEMENTATION.
 
         lv_wrong_status = lv_status.
 * Customize error messages
-*        APPEND VALUE #( %tky = <incident>-%tky
-*                        %msg = NEW zcl_incident_messages_lgl( textid = zcl_incident_messages_lgl=>status_invalid
-*                                                            status = lv_wrong_status
-*                                                            severity = if_abap_behv_message=>severity-error )
-*                        %state_area = 'VALIDATE_COMPONENT'
-*                         ) TO reported-incident.
-*        lv_error = abap_true.
+        APPEND VALUE #( %tky = <incident>-%tky
+                        %msg = NEW zcl_incident_messages_nc( textid = zcl_incident_messages_nc=>status_invalid
+                                                            status = lv_wrong_status
+                                                            severity = if_abap_behv_message=>severity-error )
+                        %state_area = 'VALIDATE_COMPONENT'
+                         ) TO reported-incident.
+        lv_error = abap_true.
         EXIT.
       ENDIF.
 
@@ -240,7 +242,7 @@ CLASS lhc_zr_dt_inct_nc IMPLEMENTATION.
                       Status = lv_status ) TO lt_updated_root_entity.
 
 ** Get Text
-*      lv_text = keys[ KEY id %tky = <incident>-%tky ]-%param-text.
+      lv_text = keys[ KEY id %tky = <incident>-%tky ]-%param-text.
 
       lv_max_his_id = get_history_index(
                   IMPORTING
@@ -274,6 +276,40 @@ CLASS lhc_zr_dt_inct_nc IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
 
+    UNASSIGN <incident>.
+
+    CHECK lv_error IS INITIAL.
+
+    MODIFY ENTITIES OF zr_dt_inct_nc IN LOCAL MODE
+    ENTITY Incident
+    UPDATE  FIELDS ( ChangedDate
+                     Status )
+    WITH lt_updated_root_entity.
+
+    FREE incidents. " Free entries in incidents
+
+    MODIFY ENTITIES OF zr_dt_inct_nc IN LOCAL MODE
+     ENTITY Incident
+     CREATE BY \_History FIELDS ( HisUUID
+                                  IncUUID
+                                  HisID
+                                  PreviousStatus
+                                  NewStatus
+                                  Text )
+        AUTO FILL CID
+        WITH lt_association_entity
+     MAPPED mapped
+     FAILED failed
+     REPORTED reported.
+
+    READ ENTITIES OF zr_dt_inct_nc IN LOCAL MODE
+    ENTITY Incident
+    ALL FIELDS WITH CORRESPONDING #( keys )
+    RESULT incidents
+    FAILED failed.
+
+    result = VALUE #( FOR incident IN incidents ( %tky = incident-%tky
+                                                  %param = incident ) ).
   ENDMETHOD.
 
 ENDCLASS.

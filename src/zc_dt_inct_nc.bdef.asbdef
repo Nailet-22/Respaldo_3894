@@ -14,12 +14,13 @@ use etag
   use action Discard;
   use action Resume;
   use action Prepare;
+  use action changeStatus;
 
   use association _History { create; with draft; }
 
 }
 
-define behavior for zc_dt_inct_h_nc alias History
+define behavior for ZC_DT_INCT_H_NC alias History
 use etag
 {
   //  use update;
